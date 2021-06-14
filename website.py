@@ -38,7 +38,11 @@ def checktier(cents):
         return 1
     else:
         return 0
-
+#
+#
+#
+#
+#
 #webpage functions (calcu):
       
 @app.route('/favicon.ico',subdomain="calcu")
@@ -156,6 +160,11 @@ def dashboard():
 def commands():
     return render_template('commands.html')
 
+#
+#
+#
+#
+#
 #webpage functions (tex):
   
 if __name__ == '__main__':
