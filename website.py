@@ -1,4 +1,5 @@
-
+#important notes:
+#ignore the files for calcu, those are hidden for this github page
 from flask import Flask, send_from_directory, request, abort, jsonify, make_response, send_file
 import json, os, datetime, botvotes, Graphs
 from flask import Flask,render_template,request,redirect,session
