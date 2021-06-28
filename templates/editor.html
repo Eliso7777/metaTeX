@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Editor</title>
+<link rel="shortcut icon" type="image/ico" href="/favicon.ico"/>
+<style type="text/css" media="screen">
+    .ace-holder {
+        width: 100%;
+        height: 700px;
+    }
+    #editor { 
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<script src="/file/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<button onclick="makeimage()">submit</button>
+<div class="ace-holder"><div id="editor">\documentclass{standalone}
+\begin{document}
+\end{document}</div></div>
+<img id='result'>
+
+<script>
+    var editor = ace.edit("editor");
+    var theme = prompt('pick a theme (do not include .css or .js)','enter theme name')
+    editor.setTheme('ace/theme/'+theme.replaceAll(' ','_'));
+    editor.session.setMode("ace/mode/latex");
+    editor.setAutoScrollEditorIntoView(true);
+    editor.session.on('change', function(delta) {
+    console.log(editor.getValue())
+    });
+    function makeimage() {
+        fetch('https://tex.botbox.dev/latex',{method:'POST',headers:{'Content-Type': 'application/json'},'body':JSON.stringify({body: editor.getValue()})})
+            .then( response => response.json() )
+            .then( response => {
+                document.getElementById('result').src = response.body + '.png';
+            } );
+    }
+</script>
+</body>
+</html>
