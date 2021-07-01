@@ -1,7 +1,6 @@
 # metaTeX
 
 ![contributors](https://img.shields.io/github/contributors/Eliso7777/metaTeX?logo=github)
-![week](https://img.shields.io/github/commit-activity/w/Eliso7777/metaTeX?logo=github)
 ![month](https://img.shields.io/github/commit-activity/m/Eliso7777/metaTeX?logo=github)
 ![last](https://img.shields.io/github/last-commit/Eliso7777/metaTeX?logo=github)
 ![sizen](https://img.shields.io/github/directory-file-count/Eliso7777/metaTeX?logo=github)
