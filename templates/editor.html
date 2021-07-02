@@ -5,8 +5,25 @@
 <link rel="shortcut icon" type="image/ico" href="/favicon.ico"/>
 <style type="text/css" media="screen">
     .ace-holder {
+        float: left;
+        width: 55%;
+        height: 1500px;
+    }
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .result {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid black;
+        float: right;
+        width: 40%;
+    }
+    #result {
         width: 100%;
-        height: 700px;
     }
     #editor { 
         width: 100%;
@@ -17,21 +34,25 @@
 </head>
 <body>
 
-<button onclick="makeimage()">submit</button>
+<div class="buttons"><button onclick="makeimage()">submit</button><button onclick="lock()">lock</button><button onclick="unlock()">unlock</button></div>
 <div class="ace-holder"><div id="editor">\documentclass{standalone}
 \begin{document}
 \end{document}</div></div>
-<img id='result'>
+<div class="result"><img id='result'></div>
 
 <script>
     var editor = ace.edit("editor");
-    var theme = prompt('pick a theme (do not include .css or .js)','enter theme name')
-    editor.setTheme('ace/theme/'+theme.replaceAll(' ','_'));
+    //var theme = prompt('pick a theme (do not include .css or .js)','enter theme name')
+    editor.setTheme('ace/theme/solarized_dark')//+theme.replaceAll(' ','_'));
     editor.session.setMode("ace/mode/latex");
     editor.setAutoScrollEditorIntoView(true);
-    editor.session.on('change', function(delta) {
-    console.log(editor.getValue())
-    });
+    editor.setShowPrintMargin(false);
+    function lock() {
+        editor.setReadOnly(true);
+    }
+    function unlock() {
+        editor.setReadOnly(false);
+    }
     function makeimage() {
         fetch('https://tex.botbox.dev/latex',{method:'POST',headers:{'Content-Type': 'application/json'},'body':JSON.stringify({body: editor.getValue()})})
             .then( response => response.json() )
