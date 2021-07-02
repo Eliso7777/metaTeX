@@ -1,11 +1,27 @@
 from flask import Flask, send_from_directory, request, abort, jsonify, make_response, send_file
 import json, os, datetime, random
+from PIL import Image
 from flask import Flask,render_template,request,redirect,session
 from pdf2image import convert_from_bytes
 from flask_mail import Mail
 import json
 
 app = Flask(__name__)
+
+def savelist(imgs, filename):
+    min_img_width = min(i.width for i in imgs)
+    total_height = 0
+    for i, img in enumerate(imgs):
+        if img.width > min_img_width:
+            imgs[i] = img.resize((min_img_width, int(img.height / img.width * min_img_width)), Image.ANTIALIAS)
+        total_height += imgs[i].height
+    img_merge = Image.new(imgs[0].mode, (min_img_width, total_height), color=(230,230,230))
+    y = 0
+    for img in imgs:
+        img_merge.paste(img, (0, y))
+        y += img.height + 25
+    img_merge.save(filename+'.png')
+
 
 @app.route('/favicon.ico',subdomain="tex")
 def favicon():
@@ -23,11 +39,7 @@ def api():
     os.system(f'xelatex {filename}.tex')
     pdf = open(f'{filename}.pdf','rb').read()
     images = convert_from_bytes(bytes(pdf))
-    images[0].save(f'{filename}.png')
-    img = images[0]
-    img.save(f'{filename}.png')
-    os.system(f'convert {filename}.png -fuzz 70% -fill {tc} -opaque \'black\' {filename}.png')
-    os.system(f'convert {filename}.png -fill {bc} +transparent \'{tc}\' {filename}.png')
+    savelist(images, filename)
     image = open(filename+'.png', 'rb')
     os.chdir(old)
     return jsonify({'body':f'https://tex.botbox.dev/texf/{filename}'})
@@ -52,7 +64,6 @@ def main():
 def not_found(e):
   return render_template('404error.html'), 404
 
-#DO NOT CHANGE THESE! THEY ARE FOR HOSTING THE WEBSITE.
 if __name__ == '__main__':
     print("Listening...")
     app.config['SERVER_NAME']='botbox.dev'
