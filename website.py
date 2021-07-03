@@ -27,13 +27,16 @@ def savelist(imgs, filename):
 def favicon():
     return send_from_directory('.','favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@app.route("/latex",subdomain="tex",methods=['POST'])
-def api():
+@app.route("/latex/<path:project>",subdomain="tex",methods=['POST'])
+def api(project):
     tc = 'black'
     bc = 'white'
     old = '/home/eli/Downloads/BotBox/LaTeX'
     os.chdir(old+'/tex_files')
-    filename = str(random.randint(0,2**31))
+    if not os.path.isdir(project):
+        os.makedirs(project)
+    filename = 'main'
+    os.chdir(old+'/tex_files/'+project)
     with open(filename+'.tex', 'w') as f:
         f.write(request.json['body'])
     os.system(f'xelatex {filename}.tex')
@@ -42,7 +45,18 @@ def api():
     savelist(images, filename)
     image = open(filename+'.png', 'rb')
     os.chdir(old)
-    return jsonify({'body':f'https://tex.botbox.dev/texf/{filename}'})
+    return jsonify({'body':f'https://tex.botbox.dev/texf/{project}/{filename}'})
+
+@app.route('/editor',subdomain='tex')
+def editredirect():
+    return render_template('editor.html')
+
+@app.route('/editor/<path:project>',subdomain='tex')
+def edit(project):
+    os.chdir('/home/eli/Downloads/BotBox/LaTeX/tex_files')
+    if not os.path.isdir(project):
+        return redirect("/project/"+project)
+    return 'project name already exists'
 
 @app.route("/texf/<path:path>",subdomain="tex")
 def texs(path):
@@ -52,8 +66,8 @@ def texs(path):
 def temps(path):
     return send_from_directory('templates',path)
 
-@app.route("/editor",subdomain="tex")
-def editor():
+@app.route("/project/<path:path>",subdomain="tex")
+def editor(path):
     return render_template('texteditor.html')
 
 @app.route("/",subdomain="tex")
