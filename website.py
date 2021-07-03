@@ -64,6 +64,9 @@ def main():
 def not_found(e):
   return render_template('404error.html'), 404
 
+# Do not edit anything below this!!!
+# Everything below is for running the code and connecting it to the domain.
+
 if __name__ == '__main__':
     print("Listening...")
     app.config['SERVER_NAME']='botbox.dev'
