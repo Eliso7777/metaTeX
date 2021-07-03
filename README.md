@@ -15,3 +15,9 @@
 # Website
 
 The code is always running, and can be used [here](https://tex.botbox.dev/).
+
+# Github
+
+This github is not fully set up, if you want to help, please do by making a pull request.  
+Pull requests are **ONLY** for edits, and no new files will be added.  
+If a feature requires a new file, it must be requested through our discord, email, or on the website
