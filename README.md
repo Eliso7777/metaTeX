@@ -14,7 +14,7 @@
 
 # Website
 
-This code is hosted through a domain, and can be accessed [here](https://tex.botbox.dev)
+This code is always running, and can be accessed [here](https://tex.botbox.dev)
 
 # Github
 
